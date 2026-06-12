@@ -656,15 +656,33 @@
 
   &:hover { opacity: 0.75; }
 
-  .clause-caret { font-size: 16px; opacity: 0.6; }
+  .clause-caret {
+    font-size : 16px;
+    opacity   : 0.6;
+    transition: transform $ease-fast;
+
+    &.is-open { transform: rotate(180deg); }
+  }
 }
 
-// 條款理賠範圍 / 給付依據說明表（點擊 .link-pill 展開）
+// 條款理賠範圍 / 給付依據說明表（點擊 .link-pill 展開／收合，含滑動動畫）
 .clause-table {
-  flex      : 1 0 100%;
-  margin-top: 8px;
+  flex              : 1 0 100%;
+  display           : grid;
+  grid-template-rows: 0fr;
+  overflow          : hidden;
+  margin-top        : 0;
+  transition        : grid-template-rows $ease-mid, margin-top $ease-mid;
 
-  &.is-collapsed { display: none; }
+  &:not(.is-collapsed) {
+    grid-template-rows: 1fr;
+    margin-top         : 8px;
+  }
+
+  > .audit-table {
+    overflow  : hidden;
+    min-height: 0;
+  }
 
   .audit-table th {
     text-align: left;

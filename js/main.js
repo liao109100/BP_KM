@@ -509,7 +509,7 @@ const ClauseTable = {
     if (!table || !table.classList.contains('clause-table')) return;
     const collapsed = table.classList.toggle('is-collapsed');
     const caret = pill.querySelector('.clause-caret');
-    if (caret) caret.textContent = collapsed ? 'expand_more' : 'expand_less';
+    if (caret) caret.classList.toggle('is-open', !collapsed);
   },
 };
 

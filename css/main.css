@@ -1556,14 +1556,27 @@ body[data-role=compliance] .sidebar-item:not([data-roles~=compliance]) {
 .link-pill .clause-caret {
   font-size: 16px;
   opacity: 0.6;
+  transition: transform 0.12s ease;
+}
+.link-pill .clause-caret.is-open {
+  transform: rotate(180deg);
 }
 
 .clause-table {
   flex: 1 0 100%;
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  margin-top: 0;
+  transition: grid-template-rows 0.2s ease, margin-top 0.2s ease;
+}
+.clause-table:not(.is-collapsed) {
+  grid-template-rows: 1fr;
   margin-top: 8px;
 }
-.clause-table.is-collapsed {
-  display: none;
+.clause-table > .audit-table {
+  overflow: hidden;
+  min-height: 0;
 }
 .clause-table .audit-table th {
   text-align: left;
