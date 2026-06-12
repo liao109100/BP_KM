@@ -500,6 +500,20 @@ const CASE_CATS = {
 };
 
 // ─────────────────────────────────────────────────────────
+//  ClauseTable — 點擊條款連結展開理賠範圍／給付依據說明表
+// ─────────────────────────────────────────────────────────
+const ClauseTable = {
+  toggle(evt, pill) {
+    evt.stopPropagation();
+    const table = pill.nextElementSibling;
+    if (!table || !table.classList.contains('clause-table')) return;
+    const collapsed = table.classList.toggle('is-collapsed');
+    const caret = pill.querySelector('.clause-caret');
+    if (caret) caret.textContent = collapsed ? 'expand_more' : 'expand_less';
+  },
+};
+
+// ─────────────────────────────────────────────────────────
 //  SidePanel — 右側滑面板
 // ─────────────────────────────────────────────────────────
 const SidePanel = {
@@ -1211,6 +1225,9 @@ window.KM = {
   // Side panel
   openPanel : el => SidePanel.open(el),
   closePanel: () => SidePanel.close(),
+
+  // 條款說明表
+  toggleClause: (e, el) => ClauseTable.toggle(e, el),
 
   // Modal
   openModal         : id  => Modal.open(id),

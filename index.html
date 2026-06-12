@@ -512,7 +512,19 @@
             </div>
             <div class="link-row">
               <span class="row-label">處理依據：</span>
-              <span class="link-pill"><span class="mi">link</span> 車體損失險條款第7條（理賠範圍及給付金額）</span>
+              <span class="link-pill" onclick="KM.toggleClause(event, this)">
+                <span class="mi">link</span> 車體損失險條款第7條（理賠範圍及給付金額）
+                <span class="mi clause-caret">expand_more</span>
+              </span>
+              <div class="clause-table is-collapsed">
+                <table class="audit-table">
+                  <tbody>
+                    <tr><th style="width:90px">理賠範圍</th><td>因碰撞、傾覆、墜落等意外事故，致被保險汽車本身遭受之毀損滅失，由保險公司依本條款負賠償責任（不含人身傷亡及第三人財損，另依其他附加條款辦理）。</td></tr>
+                    <tr><th style="width:90px">給付依據</th><td>以送修廠估價單核算之實際修復費用為基礎，扣除保險契約約定之自負額後給付；修復費用逾保險金額者，以保險金額為限。</td></tr>
+                    <tr><th style="width:90px">本案核算</th><td>修復費用 8.5 萬元 − 自負額 3,000 元 ＝ 實際給付 8.2 萬元。</td></tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div><!-- /.case-card -->
 

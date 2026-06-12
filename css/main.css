@@ -1553,6 +1553,26 @@ body[data-role=compliance] .sidebar-item:not([data-roles~=compliance]) {
 .link-pill:hover {
   opacity: 0.75;
 }
+.link-pill .clause-caret {
+  font-size: 16px;
+  opacity: 0.6;
+}
+
+.clause-table {
+  flex: 1 0 100%;
+  margin-top: 8px;
+}
+.clause-table.is-collapsed {
+  display: none;
+}
+.clause-table .audit-table th {
+  text-align: left;
+  color: #566578;
+  background: #F5F8FD;
+}
+.clause-table .audit-table td {
+  line-height: 1.7;
+}
 
 .dim {
   position: fixed;

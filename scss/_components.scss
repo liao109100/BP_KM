@@ -655,6 +655,24 @@
   transition   : opacity $ease-fast;
 
   &:hover { opacity: 0.75; }
+
+  .clause-caret { font-size: 16px; opacity: 0.6; }
+}
+
+// 條款理賠範圍 / 給付依據說明表（點擊 .link-pill 展開）
+.clause-table {
+  flex      : 1 0 100%;
+  margin-top: 8px;
+
+  &.is-collapsed { display: none; }
+
+  .audit-table th {
+    text-align: left;
+    color     : $tx-mid;
+    background: $bg-soft;
+  }
+
+  .audit-table td { line-height: 1.7; }
 }
 
 // ══════════════════════════════════════════════════════════
