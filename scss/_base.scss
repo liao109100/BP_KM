@@ -51,7 +51,7 @@ body {
 // ── Accessibility ──────────────────────────────────────────────
 // 1. Focus ring：鍵盤焦點明顯可見（WCAG 2.1 AA）
 :focus-visible {
-  outline       : 3px solid #2457A7;
+  outline       : 3px solid $bdr-focus;
   outline-offset: 2px;
   border-radius : 4px;
 }
@@ -66,8 +66,8 @@ textarea:focus-visible {
 
 // ── Checkbox & Radio 統一規範 ───────────────────────────────────
 // 初始：白底 + 灰框（#C5D0DE）
-// 選中：#2C8086 底 + 白勾 / 白點
-// Indeterminate：#2C8086 底 + 白橫線
+// 選中：$teal 底 + 白勾 / 白點
+// Indeterminate：$teal 底 + 白橫線
 // ──────────────────────────────────────────────────────────────
 input[type='checkbox'],
 input[type='radio'] {
@@ -84,10 +84,10 @@ input[type='radio'] {
   flex-shrink        : 0;
   transition         : background $ease-fast, border-color $ease-fast;
 
-  &:hover:not(:disabled)  { border-color: #2C8086; }
+  &:hover:not(:disabled)  { border-color: $teal; }
 
   &:checked,
-  &:indeterminate          { background: #2C8086; border-color: #2C8086; }
+  &:indeterminate          { background: $teal; border-color: $teal; }
 
   &:disabled               { opacity: 0.45; cursor: not-allowed; }
 
@@ -140,8 +140,8 @@ input[type='radio'] {
   }
 
   &:checked {
-    background : #2C8086;
-    border-color: #2C8086;
+    background : $teal;
+    border-color: $teal;
     box-shadow : inset 0 0 0 5px #fff;
   }
 }
@@ -151,7 +151,7 @@ input[type='radio'] {
   position      : absolute;
   top           : -100%;
   left          : 16px;
-  background    : #0F3F85;
+  background    : $primary;
   color         : white;
   padding       : 8px 16px;
   border-radius : 0 0 6px 6px;

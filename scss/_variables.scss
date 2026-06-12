@@ -4,8 +4,8 @@
 // ============================================================
 
 // ── 品牌漸層 ──────────────────────────────────────────────
-$grad-start : #2C8085;
-$grad-end   : #3145A5;
+$grad-start : #0889D1;
+$grad-end   : #1D2087;
 $grad-h     : linear-gradient(90deg, $grad-start 0%, $grad-end 100%);   // 水平
 $grad-v     : linear-gradient(180deg, $grad-start 0%, $grad-end 100%);  // 垂直
 $grad-diag  : linear-gradient(150deg, #EEF3FA, #E5EDF6);                // 首頁背景
@@ -23,13 +23,13 @@ $bg-white   : #ffffff;
 
 // ── 邊框 ──────────────────────────────────────────────────
 $bdr        : #D8E2EE;
-$bdr-focus  : #2457A7;
+$bdr-focus  : #0889D1;
 
 // ── 語意色 ────────────────────────────────────────────────
-$primary    : #0F3F85;  // 主要藍（Figma: #0f3f85）
-$blue       : #2457A7;
-$navy       : #1B3263;
-$teal       : #2C8086;
+$primary    : #1D2087;  // 主要藍
+$blue       : #0889D1;
+$navy       : #1D2087;
+$teal       : #0889D1;
 $green      : #16806D;  // Figma: #16806d
 $red        : #FF4D4D;  // Figma: #ff4d4d
 $amber      : #E8911A;
@@ -40,6 +40,13 @@ $tag-new-bg : #EDF7F6;  // Figma: #edf7f6
 $tag-lt-bg  : #E6F5EE;
 $tag-hv-bg  : #FFEAEA;
 $tag-hv-bdr : #FFCCCC;
+$tag-precedent-bg: #EAF1FB;
+
+// ── 其他語意色 ────────────────────────────────────────────
+$slate      : #94A3B8;  // 次要說明文字／分組標題
+$danger-bdr : #FFCDCD;  // 警示區塊邊框
+$danger-tx  : #C0392B;  // 警示區塊文字
+$bg-soft    : #F5F8FD;  // 淺底色（表格、清單項）
 
 // ── 陰影 ──────────────────────────────────────────────────
 $sh1 : 0 1px 4px rgba(44, 63, 90, 0.09);

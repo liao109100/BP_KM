@@ -88,7 +88,30 @@
     transition    : color $ease-fast;
 
     &:hover { color: white; }
+
+    // 角色切換下拉選單
+    &.role-switch {
+      display    : flex;
+      align-items: center;
+      gap        : 4px;
+      cursor     : default;
+    }
   }
+}
+
+// 角色切換下拉選單本體
+.role-select {
+  background  : transparent;
+  border      : none;
+  color       : rgba(255, 255, 255, 0.88);
+  font-size   : 12.5px;
+  font-family : inherit;
+  cursor      : pointer;
+  outline     : none;
+
+  &:hover { color: white; }
+
+  option { color: $tx-main; }
 }
 
 // ── 右側容器（Topbar + Main）────────────────────────────
@@ -168,12 +191,12 @@
 
   svg { transition: transform $ease-mid; flex-shrink: 0; }
 
-  &:hover { background: $green; }
+  &:hover { background: $grad-start; }
 }
 
-// 縮合時：teal 底色 + 箭頭反向（class 直接在按鈕本身）
+// 縮合時：綠底色 + 箭頭反向（class 直接在按鈕本身）
 .sidebar-toggle.is-collapsed {
-  background: $green ;
+  background: $grad-start ;
 
   svg { transform: rotate(180deg); }
   &:hover { background: $primary ; }
@@ -182,6 +205,7 @@
 .sidebar-logo {
   display      : flex;
   align-items  : center;
+  justify-content: center;
   gap          : 9px;
   padding      : 10px 8px 16px;
   border-bottom: 1px solid $bdr;
@@ -217,6 +241,7 @@
     color     : white;
 
     svg { opacity: 1; }
+    .mi { opacity: 1; }
   }
 
   svg {
@@ -224,7 +249,19 @@
     margin-top : 1px;
     opacity    : 0.7;
   }
+
+  .mi {
+    flex-shrink: 0;
+    font-size  : 24px;
+    opacity    : 0.7;
+  }
 }
+
+// RBAC：依角色顯示對應 sidebar 模組
+body[data-role="underwriter"] .sidebar-item:not([data-roles~="underwriter"]) { display: none; }
+body[data-role="claims"] .sidebar-item:not([data-roles~="claims"]) { display: none; }
+body[data-role="advisor"] .sidebar-item:not([data-roles~="advisor"]) { display: none; }
+body[data-role="compliance"] .sidebar-item:not([data-roles~="compliance"]) { display: none; }
 
 // ── Main 容器 ────────────────────────────────────────────
 .main {

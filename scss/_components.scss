@@ -70,6 +70,17 @@
   }
 }
 
+// 樹狀選單分組子標題（如「財產保險」／「人身保險」、「保險業」／「保代經紀」）
+.tree-subheading {
+  font-size    : 12px;
+  font-weight  : 700;
+  color        : $slate;
+  letter-spacing: 1px;
+  padding      : 10px 10px 4px;
+
+  &:first-child { padding-top: 2px; }
+}
+
 .tree-item {
   display      : flex;
   align-items  : center;
@@ -213,9 +224,9 @@
     &:hover { background: #082d63; }
   }
 
-  // + 新增範本/案例 — 填充 teal（Figma: bg-[#2c8086]）
+  // + 新增範本/案例 — 填充主色
   &--gradient {
-    background: #2C8086;
+    background: $teal;
     color     : white;
     border    : none;
 
@@ -342,6 +353,194 @@
     color     : $red;      // #FF4D4D
     font-weight: 700;
     font-size : 13px;
+  }
+
+  // 中度風險／待處理
+  &--md {
+    background: $amber;
+    color     : white;
+  }
+
+  // 金評中心裁決傾向
+  &--precedent {
+    gap          : 4px;
+    background   : $tag-precedent-bg;
+    color        : $primary;
+    border-radius: 2px;
+    padding      : 4px 8px;
+    font-weight  : 700;
+    font-size    : 12px;
+
+    .mi { font-size: 14px; }
+  }
+}
+
+// 搜尋結果為空時，隱藏未命中的分頁籤
+.is-tab-hidden { display: none !important; }
+
+// 風險評分徽章
+.risk-score-badge {
+  display        : flex;
+  flex-direction : column;
+  align-items    : center;
+  justify-content: center;
+  width          : 92px;
+  height         : 92px;
+  border-radius  : 50%;
+  flex-shrink    : 0;
+  border         : 4px solid;
+
+  .risk-score-num {
+    font-size  : 28px;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  .risk-score-label {
+    font-size  : 12px;
+    font-weight: 700;
+    margin-top : 2px;
+  }
+
+  &--lt { border-color: $green; color: $green; }
+  &--md { border-color: $amber; color: $amber; }
+  &--hv { border-color: $red;   color: $red;   }
+}
+
+// 警示提示區塊
+.alert-banner {
+  display      : flex;
+  align-items  : flex-start;
+  gap          : 10px;
+  background   : $tag-hv-bg;
+  border       : 1px solid $danger-bdr;
+  border-radius: 6px;
+  padding      : 12px 16px;
+  color        : $danger-tx;
+  font-size    : 13.5px;
+  line-height  : 1.6;
+  margin-bottom: 16px;
+
+  .mi {
+    color      : $red;
+    font-size  : 20px;
+    flex-shrink: 0;
+  }
+}
+
+// 查詢紀錄表格
+.audit-table {
+  width          : 100%;
+  border-collapse: collapse;
+  font-size      : 13px;
+
+  th,
+  td {
+    text-align   : left;
+    padding      : 10px 12px;
+    border-bottom: 1px solid $bdr;
+  }
+
+  th {
+    color      : $tx-mid;
+    font-weight: 700;
+    font-size  : 12px;
+    background : $bg-soft;
+  }
+
+  td { color: $tx-main; }
+}
+
+// 金評中心裁決傾向統計
+.precedent-summary {
+  display      : flex;
+  gap          : 10px;
+  margin-bottom: 10px;
+}
+
+.precedent-stat {
+  flex          : 1;
+  display       : flex;
+  flex-direction: column;
+  align-items   : center;
+  gap           : 2px;
+  padding       : 8px 4px;
+  border-radius : 8px;
+  background    : $bg-soft;
+}
+
+.precedent-num {
+  font-size  : 22px;
+  font-weight: 700;
+  line-height: 1.1;
+
+  &--against { color: $red; }
+  &--support { color: $green; }
+}
+
+.precedent-label {
+  font-size : 11.5px;
+  color     : $tx-mid;
+  text-align: center;
+}
+
+.precedent-bar {
+  display      : flex;
+  height       : 8px;
+  border-radius: 4px;
+  overflow     : hidden;
+  margin-bottom: 10px;
+
+  &-fill {
+    &--against { background: $red; }
+    &--support { background: $green; }
+  }
+}
+
+.precedent-note {
+  font-size    : 12px;
+  color        : $tx-light;
+  line-height  : 1.6;
+  margin-bottom: 10px;
+}
+
+.precedent-list {
+  display       : flex;
+  flex-direction: column;
+  gap           : 10px;
+  max-height    : 56vh;
+  overflow-y    : auto;
+}
+
+.precedent-item {
+  border       : 1px solid $bdr;
+  border-radius: 8px;
+  padding      : 12px 14px;
+
+  &-hd {
+    display        : flex;
+    align-items    : center;
+    justify-content: space-between;
+    gap            : 10px;
+    margin-bottom  : 4px;
+  }
+
+  &-no {
+    font-size  : 13px;
+    font-weight: 700;
+    color      : $tx-main;
+  }
+
+  &-date {
+    font-size    : 12px;
+    color        : $tx-light;
+    margin-bottom: 6px;
+  }
+
+  &-summary {
+    font-size  : 12.5px;
+    color      : $tx-mid;
+    line-height: 1.6;
   }
 }
 
@@ -1126,15 +1325,16 @@ select.filter-select {
 .doc-meta-bar {
   display      : flex;
   align-items  : center;
-  gap          : 0;
+  flex-wrap    : wrap;
+  gap          : 8px 0;
   font-size    : 14px;
   border-radius: $r-sm;
-  padding      : 0px 16px;
+  padding      : 10px 16px;
   margin-bottom: 16px;
 
-  .dmb-item { display: flex; align-items: center; gap: 6px; }
+  .dmb-item { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
   .dmb-sep  { width: 1px; height: 14px; background: $bdr; margin: 0 16px; }
-  .dmb-key  { color: $tx-mid; }
+  .dmb-key  { color: $tx-mid; white-space: nowrap; }
   .dmb-val  { font-weight: 600; color: $tx-main; }
 }
 

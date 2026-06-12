@@ -31,7 +31,7 @@ const esc = str =>
 // ─────────────────────────────────────────────────────────
 //  Nav — 頁面切換
 // ─────────────────────────────────────────────────────────
-const SCREENS = ['home', 'app', 'app-flow-list', 'app-flow-edit', 'app-case-detail', 'app-customs', 'app-customs-detail', 'app-new-case'];
+const SCREENS = ['home', 'app', 'app-flow-list', 'app-flow-edit', 'app-case-detail', 'app-customs', 'app-customs-detail', 'app-new-case', 'app-identity', 'app-risk', 'app-audit'];
 
 const Nav = {
   _show(id) {
@@ -57,7 +57,20 @@ const Nav = {
     this._show('app-customs-detail');
   },
 
+  goIdentity() {
+    this._show('app-identity');
+  },
+
+  goRisk() {
+    this._show('app-risk');
+  },
+
+  goAudit() {
+    this._show('app-audit');
+  },
+
   goCaseDetail() {
+    CaseDetail.render(SidePanel.currentCard);
     SidePanel.close();
     this._show('app-case-detail');
   },
@@ -117,7 +130,7 @@ const Search = {
       const text = (card.dataset.text || '').toLowerCase();
       const match = !hasValue || kw.split(/[,，;；]+/).some(k => k.trim() && text.includes(k.trim()));
       card.classList.toggle('is-filtered-out', !match);
-      if (match) visibleCount++;
+      if (match && !card.classList.contains('is-tab-hidden')) visibleCount++;
       card.querySelectorAll('.snippet-block').forEach(s => {
         s.classList.toggle('is-visible', hasValue && match);
       });
@@ -154,36 +167,24 @@ const Search = {
 // ── 流程步驟假資料 ──────────────────────────────────────────────
 const FLOW_STEPS_DATA = [
   {
-    title: '接收海關發《違章案件移送書》',
-    body: `<p>接收海關發來之違章案件移送書及相關證明文件，確認案件基本資料是否完整，包括進出口報單號碼、違章事實說明、當事人資料等必要資訊。</p><p>核對移送書所附文件是否齊全，如有缺漏應即通知海關補件，並於系統中建立案件基本檔案。</p>`
+    title: '受理報案',
+    body: `<p>受理被保險人或要保人之出險通知（電話、APP 或臨櫃），記錄事故發生時間、地點、車牌號碼及概略損失情形，建立理賠案件編號。</p><p>說明後續送件所需文件，包括行照、駕照、強制險與任意險保單、道路交通事故初步分析研判表等，並提醒被保險人保留修復前現場照片。</p>`
   },
   {
-    title: '確認管轄權與違規事實',
-    body: `<p>依貿易法規定確認本署是否具有管轄權，釐清違規行為是否屬於貿易法第17條至第28條所規範之範疇。</p><p>比對進出口報單、產地聲明書及相關文件，確認違規事實是否成立，並記錄違規性質（如產地標示不實、未依規定申報等）。</p><p>如屬管轄爭議案件，應依職務管轄規定移送權責機關，並留存移送紀錄。</p>`
+    title: '現場勘查與損失鑑定',
+    body: `<p>派遣或委託查勘人員至事故現場或修配廠進行車損狀況拍照存證，初步估算損失範圍與金額。</p><p>必要時調閱行車紀錄器、路口監視器影像及道路交通事故初步分析研判表，確認事故發生經過與承保範圍是否相符，並判斷是否涉及第三人傷亡。</p>`
   },
   {
-    title: '發函通知廠商暨回收廠商回覆',
-    body: `<p>依行政程序法第102條規定，以書面通知當事人（廠商）就違規事實及擬處分情形表示意見，給予陳述意見之機會。</p><p>函文應載明：案件概要、違規法條依據、廠商回覆期限（通常為10至14工作日）及聯絡窗口。</p><p>回覆期限屆滿後，彙整廠商所提供之說明文件及抗辯理由，納入後續審查。</p>`
+    title: '送修估價與文件審核',
+    body: `<p>審核修配廠提供之估價單，逐項核對更換零件、烤漆工資與市場行情是否合理，必要時要求提供替代估價以利比對。</p><p>彙整要保書、保單條款、行照、駕照及相關證明文件，確認被保險人身分、保單有效性與承保內容無誤，如有缺漏應通知補件。</p>`
   },
   {
-    title: '核相關資料',
-    body: `<p>就廠商回覆之說明及所附文件，進行實質審核：</p><p><strong>一、</strong> 核對原產地認定標準（實質轉型規定），確認加工程序是否達到實質轉型門檻。</p><p><strong>二、</strong> 比對相關法規規定與歷史案例，判斷本案違規情節輕重。</p><p><strong>三、</strong> 如有需要，得請海關或相關機關提供補充文件，或委請鑑定機構出具意見。</p>`
+    title: '核賠與金額核定',
+    body: `<p>依保險條款核算理賠金額，扣除約定自負額及零件折舊（如適用）。</p><p>如案件屬除外責任認定有疑義、金額逾一般授權額度，或屬無過失但求償金額較高之特殊情況，應簽報理賠主管或提送理賠主管會議審核，並可調閱過往同類案例（如本案例庫之「特殊情況核准」案例）作為核定依據。</p>`
   },
   {
-    title: '初步處分決策',
-    body: `<p>由承辦人員依審核結果，研擬初步裁處意見，包含：</p><p>● 違規事實認定及適用法條（貿易法第28條第1項各款）</p><p>● 裁處類型：警告、停止輸出入許可、或罰鍰（3萬至300萬元）</p><p>● 從輕或從重量處之建議依據（如主動申報、情節輕微、初犯等）</p><p>初步意見提送組長或科長審閱，如有疑義退回重查或召開案件研討。</p>`
-  },
-  {
-    title: '送簽審與最終處分決定',
-    body: `<p>完成簽辦文件後，依授權層級送核：</p><p>● 罰鍰30萬元（含）以下：組長核定</p><p>● 罰鍰30萬元以上或涉及停止輸出入：署長或副署長核定</p><p>核定後，如有必要召開裁決委員會，就案件進行集體審議，確保處分決定之合法性與一致性。</p>`
-  },
-  {
-    title: '發出處分書與結案',
-    body: `<p>依行政程序法第96條規定，製作行政處分書，內容應記載：</p><p><strong>一、</strong> 相對人（廠商）基本資料</p><p><strong>二、</strong> 主文：處分類型與金額</p><p><strong>三、</strong> 事實與理由：違規事實、適用法條、量處依據</p><p><strong>四、</strong> 救濟告知：申請訴願之期限（30日內）及受理機關</p><p>以雙掛號郵寄送達當事人，並於系統中登錄送達回執及結案日期。</p>`
-  },
-  {
-    title: '追蹤後續結果',
-    body: `<p>結案後應追蹤下列事項：</p><p>● <strong>罰鍰繳納</strong>：確認當事人是否於期限內繳納罰鍰，逾期移送行政執行署強制執行。</p><p>● <strong>訴願申請</strong>：如當事人提起訴願，依程序轉送訴願委員會，並配合補充答辯資料。</p><p>● <strong>行政訴訟</strong>：如進入行政訴訟階段，協助法務單位準備訴訟文件。</p><p>● <strong>案例歸檔</strong>：將本案處理結果歸檔，供後續相似案件參考。</p>`
+    title: '撥款結案',
+    body: `<p>核定金額後，將理賠金匯入被保險人或修配廠指定帳戶，並發出理賠核定通知書（含核賠金額、計算明細及駁回理由，如有）。</p><p>於系統中歸檔本案處理紀錄與相關文件，供後續同類案件查詢與理賠金額參考。</p>`
   }
 ];
 
@@ -416,18 +417,18 @@ const TreeCount = {
       if (span) span.textContent = n;
     });
 
-    // 計算 Tab 總計（出口 = ex-* 之和，進口 = im-* 之和）
-    const exTotal = Object.entries(counts)
-      .filter(([k]) => k.startsWith('ex-'))
+    // 計算 Tab 總計（理賠案例 = cl-* 之和，裁罰案例 = ex-*／im-* 之和）
+    const claimsTotal = Object.entries(counts)
+      .filter(([k]) => k.startsWith('cl-'))
       .reduce((s, [, v]) => s + v, 0);
-    const imTotal = Object.entries(counts)
-      .filter(([k]) => k.startsWith('im-'))
+    const penaltyTotal = Object.entries(counts)
+      .filter(([k]) => k.startsWith('ex-') || k.startsWith('im-'))
       .reduce((s, [, v]) => s + v, 0);
 
-    const tabEx = $('tab-export');
-    const tabIm = $('tab-import');
-    if (tabEx) tabEx.textContent = `出口（${exTotal}）`;
-    if (tabIm) tabIm.textContent = `進口（${imTotal}）`;
+    const tabClaims = $('tab-claims');
+    const tabPenalty = $('tab-penalty');
+    if (tabClaims) tabClaims.textContent = `理賠案例（${claimsTotal}）`;
+    if (tabPenalty) tabPenalty.textContent = `裁罰案例（${penaltyTotal}）`;
   },
 };
 
@@ -435,26 +436,35 @@ const TreeCount = {
 //  Tree — 樹狀選單
 // ─────────────────────────────────────────────────────────
 const Tree = {
-  /** 切換出口 / 進口 Tab，自動選中第一個項目 */
+  /** 切換理賠案例 / 裁罰案例 Tab，自動選中第一個項目，並過濾右側案例卡片 */
   switchTab(type) {
-    const tEx = $('tree-export');
-    const tIm = $('tree-import');
-    const bEx = $('tab-export');
-    const bIm = $('tab-import');
+    const tClaims = $('tree-claims');
+    const tPenalty = $('tree-penalty');
+    const bClaims = $('tab-claims');
+    const bPenalty = $('tab-penalty');
 
-    const isExport = type === 'ex';
-    tEx.style.display = isExport ? '' : 'none';
-    tIm.style.display = isExport ? 'none' : '';
-    bEx.className = 'tree-tab ' + (isExport ? 'is-active' : 'is-inactive');
-    bIm.className = 'tree-tab ' + (isExport ? 'is-inactive' : 'is-active');
+    const isClaims = type === 'claims';
+    tClaims.style.display = isClaims ? '' : 'none';
+    tPenalty.style.display = isClaims ? 'none' : '';
+    bClaims.className = 'tree-tab ' + (isClaims ? 'is-active' : 'is-inactive');
+    bPenalty.className = 'tree-tab ' + (isClaims ? 'is-inactive' : 'is-active');
 
-    // 自動選中新 Tab 的第一個項目，確保右側不為空
-    const activeList = isExport ? tEx : tIm;
+    // 依分類前綴過濾案例卡片：理賠案例（cl-*）／裁罰案例（ex-*、im-*）
+    document.querySelectorAll('#app .case-card').forEach(card => {
+      const cat = card.dataset.category || '';
+      const belongsToClaims = cat.startsWith('cl-');
+      card.classList.toggle('is-tab-hidden', belongsToClaims !== isClaims);
+    });
+
+    // 自動選中新 Tab 的第一個項目，確保右側標題不為空
+    const activeList = isClaims ? tClaims : tPenalty;
     const first = activeList?.querySelector('.tree-item');
     if (first) {
       const title = first.querySelector('span:not(.tree-count):not(.tree-folder)')?.textContent.trim() || '';
       this.select(first, title);
     }
+
+    TreeCount.refresh();
   },
 
   /** 選取樹狀項目，更新右側標題 */
@@ -466,11 +476,35 @@ const Tree = {
   },
 };
 
+// 案例分類 → 樹狀分類標題（側滑面板標題用）
+const CASE_CATS = {
+  'cl-1': '汽車險：碰撞、毀損理賠案例',
+  'cl-2': '機車險：竊盜、毀損理賠案例',
+  'cl-3': '旅行平安險：海外突發狀況理賠案例',
+  'cl-4': '住宅火災及地震基本保險：火災、地震理賠案例',
+  'cl-5': '傷害保險（意外險）：意外傷害理賠案例',
+  'cl-6': '醫療健康保險：住院醫療理賠案例',
+  'cl-7': '人壽保險：身故保險金理賠案例',
+  'cl-8': '寵物保險：意外傷害、疾病理賠案例',
+  'ex-1': '未盡告知義務：未提供保單條款重要內容說明',
+  'ex-2': '招攬糾紛(1)：業務員招攬話術與商品內容不符',
+  'ex-3': '招攬糾紛(2)：保單建議書與實際保障內容不符(投資型保單)',
+  'ex-4': '招攬糾紛(3)：保單建議書與實際保障內容不符(其他)',
+  'ex-5': '核保瑕疵：未落實核保程序致帶病投保',
+  'ex-6': '理賠爭議：理賠認定與給付有所疑義',
+  'ex-7': '廣告及文宣不實',
+  'ex-8': '個人資料保護違規',
+  'ex-9': '其他：如複合型態(含內控+招攬併處)等',
+  'im-1': '保代經紀-未盡告知義務',
+  'im-2': '保代經紀-招攬糾紛',
+};
+
 // ─────────────────────────────────────────────────────────
 //  SidePanel — 右側滑面板
 // ─────────────────────────────────────────────────────────
 const SidePanel = {
-  open() {
+  open(card) {
+    if (card) this.render(card);
     $('side-panel').classList.add('is-open');
     $('dim').classList.add('is-open');
   },
@@ -478,6 +512,126 @@ const SidePanel = {
   close() {
     $('side-panel').classList.remove('is-open');
     $('dim').classList.remove('is-open');
+  },
+
+  /** 依被點擊的 .case-card 內容，重新填充側滑面板 */
+  render(card) {
+    this.currentCard = card;
+    const title = CASE_CATS[card.dataset.category] || $('section-title')?.textContent.trim() || '案例詳情';
+    const titleEl = document.querySelector('#side-panel .side-title');
+    if (titleEl) titleEl.textContent = title;
+
+    const parts = [];
+
+    const tagRow = card.querySelector('.tag-row');
+    if (tagRow) parts.push(tagRow.outerHTML);
+
+    const meta = card.querySelector('.case-meta');
+    if (meta) {
+      const clone = meta.cloneNode(true);
+      clone.style.fontSize = '12.5px';
+      clone.style.marginBottom = '14px';
+      parts.push(clone.outerHTML);
+    }
+
+    parts.push('<hr class="side-divider">');
+
+    const label = card.querySelector('.section-label');
+    const summary = card.querySelector('.case-summary');
+    if (summary) {
+      parts.push(
+        `<div style="margin-bottom:16px">` +
+          `<div class="side-section-title">${(label?.textContent || '案情摘要').trim()}：</div>` +
+          `<div class="side-text">${summary.innerHTML}</div>` +
+        `</div>`
+      );
+    }
+
+    const attach = card.querySelector('.attach-row');
+    if (attach) parts.push(attach.outerHTML);
+
+    const link = card.querySelector('.link-row');
+    if (link) parts.push(link.outerHTML);
+
+    const body = document.querySelector('#side-panel .side-panel-body');
+    if (body) body.innerHTML = parts.join('\n');
+  },
+};
+
+// ─────────────────────────────────────────────────────────
+//  CaseDetail — 案例完整詳情頁（與側滑面板內容一致）
+// ─────────────────────────────────────────────────────────
+const CaseDetail = {
+  render(card) {
+    if (!card) return;
+
+    const cat   = card.dataset.category;
+    const catTitle = CASE_CATS[cat] || '';
+
+    const bcCat = $('cd-breadcrumb-cat');
+    if (bcCat) bcCat.textContent = catTitle;
+
+    const metaRows = [...card.querySelectorAll('.case-meta .meta-row')].map(row => ({
+      key: row.querySelector('.meta-key')?.textContent.trim() || '',
+      val: row.querySelector('.meta-val')?.innerHTML || '',
+    }));
+    const primary = metaRows[0] || { key: '', val: '' };
+
+    const pageTitle = $('cd-page-title');
+    if (pageTitle) pageTitle.innerHTML = `${primary.val} — 案例完整詳情`;
+
+    const metaBar = $('cd-meta-bar');
+    if (metaBar) {
+      metaBar.innerHTML = metaRows.map((m, i) =>
+        (i > 0 ? '<div class="dmb-sep"></div>' : '') +
+        `<div class="dmb-item"><span class="dmb-key">${m.key}</span><span class="dmb-val">${m.val}</span></div>`
+      ).join('');
+    }
+
+    const summaryLabel = card.querySelector('.section-label')?.textContent.trim() || '案情摘要';
+    const summary = card.querySelector('.case-summary')?.innerHTML || '';
+    const summaryHd = $('cd-summary-hd');
+    if (summaryHd) summaryHd.textContent = summaryLabel;
+    const summaryBody = $('cd-summary-body');
+    if (summaryBody) summaryBody.innerHTML = `<p>${summary}</p>`;
+
+    // 案情明細表：以案件 meta 欄位整理為表格，補充摘要內容
+    const summaryTableBody = $('cd-summary-table-body');
+    if (summaryTableBody) {
+      summaryTableBody.innerHTML = metaRows.map(m =>
+        `<tr><td>${m.key.replace(/[：:]\s*$/, '')}</td><td>${m.val}</td></tr>`
+      ).join('');
+    }
+
+    // 「說明」「附記」為原始裁罰公文內容，僅未盡告知義務範例（ex-1）保留
+    const extra = $('cd-extra-sections');
+    if (extra) extra.style.display = (cat === 'ex-1') ? '' : 'none';
+
+    const infoFields = $('cd-info-fields');
+    if (infoFields) {
+      infoFields.innerHTML = metaRows.slice(1).map(m =>
+        `<div style="color:#8898AA;font-weight:600;margin-top:4px">${m.key.replace(/[：:]\s*$/, '')}</div>` +
+        `<div style="color:#2F3D50;line-height:1.5">${m.val}</div>`
+      ).join('');
+    }
+
+    const infoTags = $('cd-info-tags');
+    const tagRow = card.querySelector('.tag-row');
+    if (infoTags && tagRow) infoTags.innerHTML = tagRow.innerHTML;
+
+    // 「金評中心裁決傾向」僅標有 tag--precedent 的案例顯示
+    const precedentBox = $('cd-precedent-box');
+    if (precedentBox) precedentBox.style.display = card.querySelector('.tag--precedent') ? '' : 'none';
+
+    const attachFields = $('cd-attach-fields');
+    if (attachFields) {
+      const attach = card.querySelector('.attach-row');
+      const link = card.querySelector('.link-row');
+      let html = '';
+      if (attach) html += [...attach.querySelectorAll('.attach-pill')].map(p => p.outerHTML).join('');
+      if (link) html += [...link.querySelectorAll('.link-pill')].map(p => p.outerHTML).join('');
+      attachFields.innerHTML = html;
+    }
   },
 };
 
@@ -565,7 +719,7 @@ const Modal = {
   },
 
   submitSearch() {
-    const kw = $('adv-keyword').value.trim() || '出口貿易限制';
+    const kw = $('adv-keyword').value.trim() || '未盡告知義務';
     this.close('modal-adv');
     const input = $('search-input');
     if (input) {
@@ -573,15 +727,15 @@ const Modal = {
       Search.onInput(kw);
     }
     // ④⑤ TreeCount.refresh() 已在 Search.onInput 末尾呼叫
-    // 自動切換到結果較多的 Tab
+    // 自動切換到結果較多的 Tab（理賠案例 vs 裁罰案例）
     const counts = {};
     document.querySelectorAll('#app .case-card:not(.is-filtered-out)').forEach(c => {
       const cat = c.dataset.category || '';
-      const tab = cat.startsWith('im-') ? 'im' : 'ex';
+      const tab = cat.startsWith('cl-') ? 'claims' : 'penalty';
       counts[tab] = (counts[tab] || 0) + 1;
     });
-    if ((counts.im || 0) > (counts.ex || 0)) Tree.switchTab('im');
-    else Tree.switchTab('ex');
+    if ((counts.claims || 0) > (counts.penalty || 0)) Tree.switchTab('claims');
+    else Tree.switchTab('penalty');
   },
 
   // ── 法規選擇 Modal ─────────────────────────────────────
@@ -816,9 +970,25 @@ const NewCase = {
   init() {
     this._files = [];
     this._renderFileList();
+    this.mainType = 'claims';
+    this.switchMain('claims');
+    this.switchType('ex');
   },
 
-  /** 出口/進口 切換 */
+  /** 理賠案例/裁罰案例 主分類切換 */
+  switchMain(type) {
+    this.mainType = type;
+    const isClaims = type === 'claims';
+    $('nc-main-claims')?.classList.toggle('is-active', isClaims);
+    $('nc-main-penalty')?.classList.toggle('is-active', !isClaims);
+    if ($('nc-claims-classify'))  $('nc-claims-classify').style.display  = isClaims ? '' : 'none';
+    if ($('nc-penalty-classify')) $('nc-penalty-classify').style.display = isClaims ? 'none' : '';
+    if ($('nc-fields-claims'))  $('nc-fields-claims').style.display  = isClaims ? '' : 'none';
+    if ($('nc-fields-penalty')) $('nc-fields-penalty').style.display = isClaims ? 'none' : '';
+    if ($('nc-law-field')) $('nc-law-field').style.display = isClaims ? 'none' : '';
+  },
+
+  /** 保險業/保代經紀 切換 */
   switchType(type) {
     ['nc-tab-ex', 'nc-tab-im'].forEach(id => {
       const el = $(id);
@@ -827,18 +997,18 @@ const NewCase = {
     });
     // 更新樣態清單
     const cats = type === 'ex' ? [
-      '未依規定標示產地：未見標示',
-      '產地標示不實(1)：他國產製或國貨標成他國',
-      '產地標示不實(2)：他國產製標成臺灣（加強管理）',
-      '產地標示不實(3)：他國產製標成臺灣（其他）',
-      '足以使人誤認產地',
-      'CITES',
-      '商標/仿冒(侵權)',
-      '管制貨品(111)',
-      '其他',
+      '未盡告知義務：未提供保單條款重要內容說明',
+      '招攬糾紛(1)：業務員招攬話術與商品內容不符',
+      '招攬糾紛(2)：保單建議書與實際保障內容不符(投資型保單)',
+      '招攬糾紛(3)：保單建議書與實際保障內容不符(其他)',
+      '核保瑕疵：未落實核保程序致帶病投保',
+      '理賠爭議：理賠認定與給付有所疑義',
+      '廣告及文宣不實',
+      '個人資料保護違規',
+      '其他：如複合型態(含內控+招攬併處)等',
     ] : [
-      '未依規定標示產地',
-      '產地標示不實',
+      '保代經紀-未盡告知義務',
+      '保代經紀-招攬糾紛',
     ];
     const sel = $('nc-category');
     if (!sel) return;
@@ -869,7 +1039,7 @@ const NewCase = {
     }
     list.innerHTML = this._files.map((f, i) => `
       <div class="nc-file-item">
-        <span class="mi" style="color:#2457A7;font-size:18px">attach_file</span>
+        <span class="mi" style="color:#0889D1;font-size:18px">attach_file</span>
         <span class="nc-file-name">${esc(f.name)}</span>
         <span class="nc-file-size">${(f.size / 1024).toFixed(0)} KB</span>
         <button class="nc-file-remove" onclick="KM.ncRemoveFile(${i})"><span class="mi">close</span></button>
@@ -905,8 +1075,13 @@ const NewCase = {
 
   /** 儲存 / 送出 */
   save(publish) {
-    const title = $('nc-category')?.value;
-    if (!title) { Toast.show('請先選擇樣態'); return; }
+    if (this.mainType === 'penalty') {
+      const title = $('nc-category')?.value;
+      if (!title) { Toast.show('請先選擇裁罰案樣態'); return; }
+    } else {
+      const cat = $('nc-cat-claims')?.value;
+      if (!cat) { Toast.show('請先選擇商品類型'); return; }
+    }
     Toast.show(publish ? '案例已發布！' : '草稿已儲存');
     Nav.goApp();
   },
@@ -956,7 +1131,7 @@ const CustomsSearch = {
   },
 };
 
-// ── 步驟切換（海關答聯單詳細頁）────────────────────────────
+// ── 步驟切換（函釋案件詳細頁）────────────────────────────
 const StepView = {
   switch(n) {
     [1, 2, 3].forEach(i => {
@@ -964,6 +1139,14 @@ const StepView = {
       const c = $(`step-c-${i}`);
       if (c) c.style.display = i === n ? '' : 'none';
     });
+  },
+};
+
+// ── Role — RBAC 角色切換 ─────────────────────────────────
+const Role = {
+  switch(role) {
+    document.body.dataset.role = role;
+    document.querySelectorAll('.role-select').forEach(sel => { sel.value = role; });
   },
 };
 
@@ -975,6 +1158,11 @@ window.KM = {
   goCustomsDetail: () => Nav.goCustomsDetail(),
   goCaseDetail   : () => Nav.goCaseDetail(),
   goNewCase      : () => Nav.goNewCase(),
+  goIdentity     : () => Nav.goIdentity(),
+  goRisk         : () => Nav.goRisk(),
+  goAudit        : () => Nav.goAudit(),
+  switchRole     : role => Role.switch(role),
+  ncSwitchMain   : t  => NewCase.switchMain(t),
   ncSwitchType   : t  => NewCase.switchType(t),
   ncHandleFiles  : el => NewCase.handleFiles(el),
   ncRemoveFile   : i  => NewCase.removeFile(i),
@@ -1021,7 +1209,7 @@ window.KM = {
   toggleSidebar: () => Sidebar.toggle(),
 
   // Side panel
-  openPanel : () => SidePanel.open(),
+  openPanel : el => SidePanel.open(el),
   closePanel: () => SidePanel.close(),
 
   // Modal

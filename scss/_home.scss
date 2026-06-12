@@ -51,8 +51,18 @@
   font-size    : 32px;
   font-weight  : 700;
   color        : $blue;
-  margin-bottom: 22px;
+  margin-bottom: 8px;
   padding-left: 10px;
+}
+
+// 系統介紹說明文字
+.h-intro {
+  font-size    : 14px;
+  color        : $tx-mid;
+  line-height  : 1.7;
+  padding-left : 10px;
+  margin-bottom: 22px;
+  max-width    : 640px;
 }
 
 // ── 功能卡片格線 ────────────────────────────────────────
@@ -110,10 +120,14 @@
     }
 
     img {
-      width     : 26px;
-      height    : 26px;
+      width     : 30px;
+      height    : 30px;
       object-fit: contain;
-      filter    : brightness(0) invert(1); // 轉成白色
+    }
+
+    .mi {
+      color    : white;
+      font-size: 26px;
     }
   }
 
