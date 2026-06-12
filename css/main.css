@@ -711,6 +711,16 @@ a[href],
   font-size: 24px;
   opacity: 0.7;
 }
+.sidebar-item .sidebar-ico {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  padding: 3px;
+  border-radius: 6px;
+  object-fit: contain;
+  background: linear-gradient(90deg, #0889D1 0%, #1D2087 100%);
+  box-sizing: border-box;
+}
 
 body[data-role=underwriter] .sidebar-item:not([data-roles~=underwriter]) {
   display: none;

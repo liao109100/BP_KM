@@ -255,6 +255,17 @@
     font-size  : 24px;
     opacity    : 0.7;
   }
+
+  .sidebar-ico {
+    flex-shrink  : 0;
+    width        : 24px;
+    height       : 24px;
+    padding      : 3px;
+    border-radius: 6px;
+    object-fit   : contain;
+    background   : $grad-h;
+    box-sizing   : border-box;
+  }
 }
 
 // RBAC：依角色顯示對應 sidebar 模組
